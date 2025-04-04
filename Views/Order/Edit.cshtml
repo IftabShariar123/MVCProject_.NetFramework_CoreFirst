@@ -1,0 +1,142 @@
+﻿@model Project_MVC_CF_Special.Models.OrderMaster
+
+@{
+    ViewBag.Title = "Edit";
+    // Null check
+    if (Model.OrderDetails == null)
+    {
+        Model.OrderDetails = new List<Project_MVC_CF_Special.Models.OrderDetail>();
+    }
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>OrderMaster</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.OrderID)
+
+        <!-- Order Master Fields -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("CustomerName", "Customer Name", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.Label("Image", "Image", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AddressProofImage, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AddressProofImage, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Terms, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Terms)
+                    @Html.ValidationMessageFor(model => model.Terms, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Details Section -->
+        <div id="orderDetailsContainer">
+            @foreach (var item in Model.OrderDetails)
+            {
+                <div class="form-group row" id="row-@item.OrderDetailID">
+                    <!-- Required Hidden Fields -->
+                    @Html.Hidden("OrderDetails.Index", item.OrderDetailID)
+                    @Html.Hidden("OrderDetails[" + item.OrderDetailID + "].OrderDetailID", item.OrderDetailID)
+                    @Html.Hidden("OrderDetails[" + item.OrderDetailID + "].ProductID", item.ProductID)
+                    @Html.Hidden("OrderDetails[" + item.OrderDetailID + "].OrderID", item.OrderID)
+
+                    <!-- Product Name -->
+                    <div class="col-md-3">
+                        <label class="control-label">Product</label>
+                        <input type="text" class="form-control" readonly
+                               value="@item.product.ProductName" />
+                    </div>
+
+                    <!-- Quantity -->
+                    <div class="col-md-3">
+                        <label class="control-label">Quantity</label>
+                        <input type="number" class="form-control"
+                               name="OrderDetails[@item.OrderDetailID].Quantity"
+                               value="@item.Quantity" />
+                        @Html.ValidationMessage("OrderDetails[" + item.OrderDetailID + "].Quantity", "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Rate -->
+                    <div class="col-md-3">
+                        <label class="control-label">Rate</label>
+                        <input type="number" step="0.01" class="form-control"
+                               name="OrderDetails[@item.OrderDetailID].Rate"
+                               value="@item.Rate" />
+                        @Html.ValidationMessage("OrderDetails[" + item.OrderDetailID + "].Rate", "", new { @class = "text-danger" })
+                    </div>
+
+                    <!-- Remove Button -->
+                    <div class="col-md-3">
+                        <button type="button" class="btn btn-danger remove-item" data-id="@item.OrderDetailID">Remove</button>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "List")
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Handle click on "Remove" button
+            $(".remove-item").click(function () {
+                var rowId = $(this).data("id");
+                $("#row-" + rowId).remove();
+
+                // Add hidden input for removed item
+                $("<input>").attr({
+                    type: "hidden",
+                    name: "RemovedOrderDetailIDs",
+                    value: rowId
+                }).appendTo("form");
+            });
+        });
+    </script>
+}

@@ -1,0 +1,52 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+
+/* Site.css */
+.navbar-dark {
+    background-color: #212529 !important; /* Darker black */
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+    .navbar-brand:hover, .navbar-nav .nav-link:hover {
+        color: rgba(255, 255, 255, 1) !important;
+    }
+
+/* Space out the login/register links */
+.navbar-collapse .navbar-nav:last-child .nav-item {
+    margin-left: 1rem;
+}
+
+
+/* Add spacing between nav items */
+.navbar-nav .nav-item {
+    margin-right: 1rem; /* Adjust value as needed */
+}
+
+/* Or specifically target the links */
+.navbar-nav .nav-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}

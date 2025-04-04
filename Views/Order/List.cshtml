@@ -1,0 +1,294 @@
+﻿@model PagedList.IPagedList<Project_MVC_CF_Special.Models.OrderMaster>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Order List";
+}
+
+@functions {
+    public string GetSortDirection(string field)
+    {
+        if (ViewBag.SortField == field)
+        {
+            return ViewBag.SortDirection == "asc" ? "desc" : "asc";
+        }
+        return "asc";
+    }
+
+    public string GetSortIcon(string field)
+    {
+        if (ViewBag.SortField == field)
+        {
+            return ViewBag.SortDirection == "asc" ? "↑" : "↓";
+        }
+        return "";
+    }
+}
+
+<h2>Order List</h2>
+
+<!-- Filter Section -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Filters</h5>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("List", "Order", FormMethod.Get, new { id = "filterForm" }))
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Search By:</label>
+                        <select name="filterField" class="form-control" id="filterField">
+                            <option value="">-- Select Field --</option>
+                            <option value="OrderID" @(ViewBag.FilterField == "OrderID" ? "selected" : "")>Order ID</option>
+                            <option value="CustomerName" @(ViewBag.FilterField == "CustomerName" ? "selected" : "")>Customer Name</option>
+                            <option value="Email" @(ViewBag.FilterField == "Email" ? "selected" : "")>Email</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Search Term:</label>
+                        <input type="text" name="searchTerm" class="form-control" id="searchTerm" value="@ViewBag.SearchTerm" placeholder="Type to search..." />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>From Date:</label>
+                        <input type="date" name="fromDate" class="form-control" value="@ViewBag.FromDate" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>To Date:</label>
+                        <input type="date" name="toDate" class="form-control" value="@ViewBag.ToDate" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="@Url.Action("List")" class="btn btn-secondary">Reset</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Page Size Selection -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <span>Show</span>
+        <select id="pageSizeSelector" class="form-select d-inline-block w-auto mx-2">
+            <option value="5" @(ViewBag.PageSize == 5 ? "selected" : "")>5</option>
+            <option value="10" @(ViewBag.PageSize == 10 ? "selected" : "")>10</option>
+            <option value="20" @(ViewBag.PageSize == 20 ? "selected" : "")>20</option>
+            <option value="50" @(ViewBag.PageSize == 50 ? "selected" : "")>50</option>
+        </select>
+        <span>entries</span>
+    </div>
+</div>
+
+<!-- Order Table -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Order ID", "List", new
+                {
+                    sortField = "OrderID",
+                    sortDirection = GetSortDirection("OrderID"),
+                    pageSize = ViewBag.PageSize,
+                    searchTerm = ViewBag.SearchTerm,
+                    filterField = ViewBag.FilterField,
+                    fromDate = ViewBag.FromDate,
+                    toDate = ViewBag.ToDate
+                })
+                @GetSortIcon("OrderID")
+            </th>
+            <th>
+                @Html.ActionLink("Order Date", "List", new
+                {
+                    sortField = "OrderDate",
+                    sortDirection = GetSortDirection("OrderDate"),
+                    pageSize = ViewBag.PageSize,
+                    searchTerm = ViewBag.SearchTerm,
+                    filterField = ViewBag.FilterField,
+                    fromDate = ViewBag.FromDate,
+                    toDate = ViewBag.ToDate
+                })
+                @GetSortIcon("OrderDate")
+            </th>
+            <th>
+                @Html.ActionLink("Customer Name", "List", new
+                {
+                    sortField = "CustomerName",
+                    sortDirection = GetSortDirection("CustomerName"),
+                    pageSize = ViewBag.PageSize,
+                    searchTerm = ViewBag.SearchTerm,
+                    filterField = ViewBag.FilterField,
+                    fromDate = ViewBag.FromDate,
+                    toDate = ViewBag.ToDate
+                })
+                @GetSortIcon("CustomerName")
+            </th>
+            <th>
+                @Html.ActionLink("Email", "List", new
+                {
+                    sortField = "Email",
+                    sortDirection = GetSortDirection("Email"),
+                    pageSize = ViewBag.PageSize,
+                    searchTerm = ViewBag.SearchTerm,
+                    filterField = ViewBag.FilterField,
+                    fromDate = ViewBag.FromDate,
+                    toDate = ViewBag.ToDate
+                })
+                @GetSortIcon("Email")
+            </th>
+            <th>Image</th>
+            <th>Terms</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderID</td>
+                <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                <td>@order.Description</td>
+                <td>@order.EmailAddress</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(order.AddressProofImage))
+                    {
+                        <img src="@Url.Content("~/Images/" + order.AddressProofImage)" width="100" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>@(order.Terms == true ? "True" : "True")</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = order.OrderID }) |
+                    <a href="#" class="delete-order" data-id="@order.OrderID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="pagination-container">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("List", new
+    {
+        page,
+        pageSize = ViewBag.PageSize,
+        searchTerm = ViewBag.SearchTerm,
+        filterField = ViewBag.FilterField,
+        fromDate = ViewBag.FromDate,
+        toDate = ViewBag.ToDate,
+        sortField = ViewBag.SortField,
+        sortDirection = ViewBag.SortDirection
+    }), new PagedListRenderOptions
+    {
+        DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded,
+        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+        MaximumPageNumbersToDisplay = 5
+    })
+</div>
+
+<p>
+    @Html.ActionLink("Create New Order", "Index")
+</p>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Delete order functionality
+            $(".delete-order").click(function () {
+                var orderId = $(this).data("id");
+                if (confirm("Are you sure? You want to delete this order?")) {
+                    $.ajax({
+                        url: "@Url.Action("Delete", "Order")",
+                        type: "POST",
+                        data: { id: orderId },
+                        success: function (response) {
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                alert("Error: " + response.message);
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Page size change
+            $("#pageSizeSelector").change(function () {
+                var selectedPageSize = $(this).val();
+                var url = new URL(window.location.href);
+                url.searchParams.set('pageSize', selectedPageSize);
+                url.searchParams.set('page', '1');
+                window.location.href = url.toString();
+            });
+
+            // Auto-submit form on filter changes
+            $('#filterField, #searchTerm, input[type="date"]').change(function() {
+                $('#filterForm').submit();
+            });
+        });
+    </script>
+}
+
+<style>
+    .table th a {
+        text-decoration: none;
+        color: #333;
+        position: relative;
+        padding-right: 15px;
+        display: inline-block;
+    }
+
+        .table th a:hover {
+            color: #000;
+        }
+
+    .sort-icon {
+        margin-left: 5px;
+    }
+
+    .pagination-container {
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        color: black;
+        padding: 8px 16px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        margin: 0 2px;
+    }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
+    .form-select {
+        display: inline-block;
+        width: auto;
+        margin: 0 5px;
+        padding: 5px;
+    }
+</style>
