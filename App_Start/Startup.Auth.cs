@@ -66,22 +66,7 @@ namespace Project_MVC_CF_Special
             //});
 
 
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            {
-                ClientId = "859931891625-vmglmvnut7jgg0cdeakou30fud8qi9ph.apps.googleusercontent.com",
-                ClientSecret = "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"
-            });
-
-
-
-
-            app.UseFacebookAuthentication(
-           new FacebookAuthenticationOptions()
-           {
-               AppId = "1040932891419689",
-               AppSecret = "541bc177cd37415f0c4d8d9ecf36ddc9",
-               Scope = { "public_profile" }
-           });
+           
         }
     }
 }
