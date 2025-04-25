@@ -1,4 +1,7 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -44,6 +47,45 @@ namespace Project_MVC_CF_Special.Models
         {
             base.OnModelCreating(modelBuilder);
             Configuration.ProxyCreationEnabled = false;
+        }
+
+
+        public int CreateCategory(string categoryName)
+        {
+            return Database.SqlQuery<int>(
+                "EXEC sp_CreateCategory @CategoryName",
+                new SqlParameter("@CategoryName", categoryName)
+            ).FirstOrDefault();
+        }
+
+        public int UpdateCategory(int categoryId, string categoryName)
+        {
+            return Database.ExecuteSqlCommand(
+                "EXEC sp_UpdateCategory @CategoryID, @CategoryName",
+                new SqlParameter("@CategoryID", categoryId),
+                new SqlParameter("@CategoryName", categoryName)
+            );
+        }
+
+        public int DeleteCategory(int categoryId)
+        {
+            return Database.ExecuteSqlCommand(
+                "EXEC sp_DeleteCategory @CategoryID",
+                new SqlParameter("@CategoryID", categoryId)
+            );
+        }
+
+        public List<Category> GetAllCategories()
+        {
+            return Database.SqlQuery<Category>("EXEC sp_GetAllCategories").ToList();
+        }
+
+        public Category GetCategoryById(int categoryId)
+        {
+            return Database.SqlQuery<Category>(
+                "EXEC sp_GetCategoryById @CategoryID",
+                new SqlParameter("@CategoryID", categoryId)
+            ).FirstOrDefault();
         }
     }
 }

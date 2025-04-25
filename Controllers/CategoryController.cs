@@ -13,9 +13,10 @@ namespace Project_MVC_CF_Special.Controllers
     public class CategoryController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            return View(db.GetAllCategories());
         }
 
         [HttpPost]
@@ -24,16 +25,16 @@ namespace Project_MVC_CF_Special.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
-                db.SaveChanges();
-                return Json(new { success = true });
+                // Using stored procedure
+                var newId = db.CreateCategory(category.CategoryName);
+                return Json(new { success = true, id = newId });
             }
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors) });
         }
 
         public JsonResult Details(int id)
         {
-            var category = db.Categories.Find(id);
+            var category = db.GetCategoryById(id);
             if (category == null)
             {
                 return Json(new { error = "Not found" }, JsonRequestBehavior.AllowGet);
@@ -43,7 +44,7 @@ namespace Project_MVC_CF_Special.Controllers
 
         public JsonResult Edit(int id)
         {
-            var category = db.Categories.Find(id);
+            var category = db.GetCategoryById(id);
             if (category == null)
             {
                 return Json(new { error = "Not found" }, JsonRequestBehavior.AllowGet);
@@ -57,8 +58,8 @@ namespace Project_MVC_CF_Special.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
-                db.SaveChanges();
+                // Using stored procedure
+                db.UpdateCategory(category.CategoryID, category.CategoryName);
                 return Json(new { success = true });
             }
             return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors) });
@@ -66,7 +67,7 @@ namespace Project_MVC_CF_Special.Controllers
 
         public JsonResult Delete(int id)
         {
-            var category = db.Categories.Find(id);
+            var category = db.GetCategoryById(id);
             if (category == null)
             {
                 return Json(new { error = "Not found" }, JsonRequestBehavior.AllowGet);
@@ -78,10 +79,18 @@ namespace Project_MVC_CF_Special.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
-            db.SaveChanges();
+            // Using stored procedure
+            db.DeleteCategory(id);
             return Json(new { success = true });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

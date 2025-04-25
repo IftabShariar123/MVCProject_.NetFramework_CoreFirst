@@ -76,12 +76,12 @@ namespace Project_MVC_CF_Special
 
 
             app.UseFacebookAuthentication(
-   new FacebookAuthenticationOptions()
-   {
-       AppId = "1040932891419689",
-       AppSecret = "541bc177cd37415f0c4d8d9ecf36ddc9",
-       Scope = { "public_profile" }
-   });
+           new FacebookAuthenticationOptions()
+           {
+               AppId = "1040932891419689",
+               AppSecret = "541bc177cd37415f0c4d8d9ecf36ddc9",
+               Scope = { "public_profile" }
+           });
         }
     }
 }

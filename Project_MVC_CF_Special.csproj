@@ -184,21 +184,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202503280941458_InitialCreate.cs" />
-    <Compile Include="Migrations\202503280941458_InitialCreate.Designer.cs">
-      <DependentUpon>202503280941458_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202503281654546_shariar.cs" />
-    <Compile Include="Migrations\202503281654546_shariar.Designer.cs">
-      <DependentUpon>202503281654546_shariar.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202503300600301_flafld.cs" />
-    <Compile Include="Migrations\202503300600301_flafld.Designer.cs">
-      <DependentUpon>202503300600301_flafld.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202504020855373_flajl.cs" />
-    <Compile Include="Migrations\202504020855373_flajl.Designer.cs">
-      <DependentUpon>202504020855373_flajl.cs</DependentUpon>
+    <Compile Include="Migrations\202504110655223_Initialcreate.cs" />
+    <Compile Include="Migrations\202504110655223_Initialcreate.Designer.cs">
+      <DependentUpon>202504110655223_Initialcreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -300,17 +288,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202503280941458_InitialCreate.resx">
-      <DependentUpon>202503280941458_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202503281654546_shariar.resx">
-      <DependentUpon>202503281654546_shariar.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202503300600301_flafld.resx">
-      <DependentUpon>202503300600301_flafld.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202504020855373_flajl.resx">
-      <DependentUpon>202504020855373_flajl.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202504110655223_Initialcreate.resx">
+      <DependentUpon>202504110655223_Initialcreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

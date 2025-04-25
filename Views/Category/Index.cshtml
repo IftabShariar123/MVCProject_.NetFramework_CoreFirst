@@ -192,6 +192,36 @@
             });
         });
 
+        $(document).ready(function () {
+            // Create Form
+            $('#createForm').submit(function (e) {
+                e.preventDefault();
+                $.post('@Url.Action("Create", "Category")', $(this).serialize(), function () {
+                    $('#createModal').modal('hide');
+                    location.reload(); // Refresh page to see changes
+                });
+            });
+
+            // Edit Form (dynamic, so we use event delegation)
+            $(document).on('submit', '#editForm', function (e) {
+                e.preventDefault();
+                $.post($(this).attr('action'), $(this).serialize(), function () {
+                    $('#editModal').modal('hide');
+                    location.reload();
+                });
+            });
+
+            // Delete Form (dynamic, so we use event delegation)
+            $(document).on('submit', '#deleteForm', function (e) {
+                e.preventDefault();
+                $.post($(this).attr('action'), $(this).serialize(), function () {
+                    $('#deleteModal').modal('hide');
+                    location.reload();
+                });
+            });
+        });
+
+
     </script>
 
     <style>

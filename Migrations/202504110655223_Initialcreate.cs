@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Initialcreate : DbMigration
     {
         public override void Up()
         {
@@ -53,7 +53,19 @@
                         ProductName = c.String(),
                         CategoryID = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.ProductID);
+                .PrimaryKey(t => t.ProductID)
+                .ForeignKey("dbo.Categories", t => t.CategoryID, cascadeDelete: true)
+                .Index(t => t.CategoryID);
+            
+            CreateTable(
+                "dbo.RolePermissions",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        RoleName = c.String(),
+                        Permission = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -132,6 +144,7 @@
             DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.OrderDetails", "ProductID", "dbo.Products");
+            DropForeignKey("dbo.Products", "CategoryID", "dbo.Categories");
             DropForeignKey("dbo.OrderDetails", "OrderID", "dbo.OrderMasters");
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
@@ -139,6 +152,7 @@
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.Products", new[] { "CategoryID" });
             DropIndex("dbo.OrderDetails", new[] { "OrderID" });
             DropIndex("dbo.OrderDetails", new[] { "ProductID" });
             DropTable("dbo.AspNetUserLogins");
@@ -146,6 +160,7 @@
             DropTable("dbo.AspNetUsers");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.RolePermissions");
             DropTable("dbo.Products");
             DropTable("dbo.OrderMasters");
             DropTable("dbo.OrderDetails");

@@ -117,7 +117,7 @@ namespace Project_MVC_CF_Special.Controllers
                 mail.IsBodyHtml = true;
 
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-                smtp.Credentials = new NetworkCredential("iftabshariar1234@gmail.com", "jrhx ohja nabm djwo"); // Update with your email & password
+                smtp.Credentials = new NetworkCredential("iftabshariar1234@gmail.com", "gwty fgpg qdty bpan"); // Update with your email & password
                 smtp.EnableSsl = true;
                 smtp.Send(mail);
             }

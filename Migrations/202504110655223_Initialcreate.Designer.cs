@@ -6,14 +6,14 @@ namespace Project_MVC_CF_Special.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class flafld : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.5.1")]
+    public sealed partial class Initialcreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(flafld));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initialcreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "202503300600301_flafld"; }
+            get { return "202504110655223_Initialcreate"; }
         }
         
         string IMigrationMetadata.Source
